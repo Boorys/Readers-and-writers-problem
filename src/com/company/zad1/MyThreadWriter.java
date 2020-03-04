@@ -33,10 +33,10 @@ public class MyThreadWriter extends Thread {
         try {
             while (true) {
                 lock.startWrite();
-                sleep((int) (Math.random() * 2500));
+                sleep((int) (Math.random() * 100));
                 System.out.println("Thread: " + getId() + "writer");
                 saveFile();
-                sleep((int) (Math.random() * 2500));
+                sleep((int) (Math.random() * 100));
                 lock.finishWrite();
 
             }
