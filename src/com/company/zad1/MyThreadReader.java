@@ -5,38 +5,41 @@ import java.io.*;
 public class MyThreadReader extends Thread {
 
 
-    Lock lock;
-    String fileName;
+    private Lock lock;
+    private String fileName;
+    private static int index = -1;
+    private int id = 0;
 
-    public MyThreadReader( String fileName, Lock lock) {
+    public MyThreadReader(String fileName, Lock lock) {
         this.fileName = fileName;
         this.lock = lock;
-
-   lock.register(getId());
+        index++;
+        id=index;
+        lock.register();
 
     }
 
 
     private String readFile() throws IOException {
         BufferedReader input = new BufferedReader(new FileReader(fileName));
-        String last="", line;
+        String last = "", line;
         while ((line = input.readLine()) != null) {
             last = line;
         }
         return last;
     }
 
-
     public void run() {
 
         try {
 
             while (true) {
-                lock.startRead(getId());
+                sleep((int) (Math.random() * 10000));
+                lock.startRead(id);
                 sleep((int) (Math.random() * 100));
                 System.out.println("Thread: " + getId() + " read: " + readFile());
                 sleep((int) (Math.random() * 100));
-                lock.finishRead(getId());
+                lock.finishRead();
             }
 
         } catch (InterruptedException | IOException e) {
